@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multilingual Disaster Relief Coordination Platform (CSEAIML2026-P22)</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <meta name="theme-color" content="#2563eb">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="brand-section">
+      <div class="brand-icon">🌐</div>
+      <div>
+        <div class="brand-title">Disaster Relief Coordination Assistant</div>
+        <div class="brand-subtitle">Multilingual Matching, Real-Time Translation & Offline Operation (CSEAIML2026-P22)</div>
+      </div>
+    </div>
+    <div class="topbar-controls">
+      <div class="status-pill online" id="nodeStatusBadge">● Online (Camp Node Replica)</div>
+      <select id="seedScenarioSelect" class="btn btn-secondary">
+        <option value="S1">Scenario S1 (Tight Supply: 60 Vol / 25 Needs)</option>
+        <option value="S2">Scenario S2 (Medium: 200 Vol / 80 Needs)</option>
+        <option value="S3">Scenario S3 (Large: 600 Vol / 250 Needs)</option>
+      </select>
+      <button class="btn btn-primary" id="seedDemoBtn">Seed Scenario</button>
+      <button class="btn btn-secondary" id="offlineToggleBtn">Simulate Offline</button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <nav class="nav-sidebar">
+      <div class="nav-tab active" data-target="dashboard">
+        <span class="tab-icon">📊</span>
+        <span>Coordinator Dashboard</span>
+      </div>
+      <div class="nav-tab" data-target="matching">
+        <span class="tab-icon">🎯</span>
+        <span>Optimal Matching</span>
+      </div>
+      <div class="nav-tab" data-target="chatbot">
+        <span class="tab-icon">💬</span>
+        <span>Multilingual Chat</span>
+      </div>
+      <div class="nav-tab" data-target="sms">
+        <span class="tab-icon">📱</span>
+        <span>SMS Gateway (54B)</span>
+      </div>
+      <div class="nav-tab" data-target="sync">
+        <span class="tab-icon">🔄</span>
+        <span>Local-First Sync</span>
+      </div>
+      <div class="nav-tab" data-target="benchmarks">
+        <span class="tab-icon">📈</span>
+        <span>Research Benchmarks</span>
+      </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- TAB 1: COORDINATOR DASHBOARD -->
+      <section id="dashboard" class="tab-content active">
+        <!-- Overview Stats -->
+        <div class="grid-4">
+          <div class="stat-box">
+            <span class="stat-label">Total Registered Volunteers</span>
+            <span class="stat-value" id="statTotalVols">0</span>
+            <span class="stat-sub"><span id="statAvailVols">0</span> available · <span id="statAssignedVols">0</span> assigned</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Relief Needs Broadcasted</span>
+            <span class="stat-value" id="statTotalNeeds">0</span>
+            <span class="stat-sub"><span id="statOpenNeeds">0</span> open · <span id="statCriticalNeeds" class="text-danger">0</span> critical triage</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Volunteer Slots Allocation</span>
+            <span class="stat-value" id="statTotalSlots">0</span>
+            <span class="stat-sub"><span id="statFilledSlots">0</span> slots filled</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Qualified Coverage Rate</span>
+            <span class="stat-value" id="statCoverageRate">0.0%</span>
+            <span class="stat-sub">Objective 1 & 4 Metric</span>
+          </div>
+        </div>
+
+        <!-- 2 Column: Spatial Map & Category Breakdown -->
+        <div class="grid-2">
+          <!-- Spatial Area Map -->
+          <div class="card">
+            <div class="card-title">
+              <span>Operational Relief Map (50 × 50 km Sector)</span>
+              <small class="text-muted">Live Clusters & Radii</small>
+            </div>
+            <div class="map-canvas-container">
+              <canvas id="disasterMapCanvas" width="560" height="400"></canvas>
+            </div>
+          </div>
+
+          <!-- Category Capacity vs Open Needs -->
+          <div class="card">
+            <div class="card-title">
+              <span>Capacity vs Open Needs by Category</span>
+              <small class="text-muted">Table 1 Mapping</small>
+            </div>
+
+            <div class="cat-progress-item">
+              <div class="cat-progress-header">
+                <strong>🏥 Medical Aid</strong>
+                <span class="text-muted" id="cat_medical_vols">0 ready</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill fill-medical" id="cat_medical_bar" style="width: 0%;"></div>
+              </div>
+              <small class="text-muted" id="cat_medical_needs">0/0 slots filled</small>
+            </div>
+
+            <div class="cat-progress-item" style="margin-top: 18px;">
+              <div class="cat-progress-header">
+                <strong>🚚 Logistics & Transport</strong>
+                <span class="text-muted" id="cat_logistics_vols">0 ready</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill fill-logistics" id="cat_logistics_bar" style="width: 0%;"></div>
+              </div>
+              <small class="text-muted" id="cat_logistics_needs">0/0 slots filled</small>
+            </div>
+
+            <div class="cat-progress-item" style="margin-top: 18px;">
+              <div class="cat-progress-header">
+                <strong>🗣️ Translation & Mediation</strong>
+                <span class="text-muted" id="cat_translation_vols">0 ready</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill fill-translation" id="cat_translation_bar" style="width: 0%;"></div>
+              </div>
+              <small class="text-muted" id="cat_translation_needs">0/0 slots filled</small>
+            </div>
+
+            <div class="cat-progress-item" style="margin-top: 18px;">
+              <div class="cat-progress-header">
+                <strong>📦 Distribution & Relief Goods</strong>
+                <span class="text-muted" id="cat_distribution_vols">0 ready</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill fill-distribution" id="cat_distribution_bar" style="width: 0%;"></div>
+              </div>
+              <small class="text-muted" id="cat_distribution_needs">0/0 slots filled</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Needs & Volunteers Tables -->
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Open Relief Needs</div>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Cat</th>
+                    <th>Urg</th>
+                    <th>Slots</th>
+                    <th>Lang</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="needsTableBody">
+                  <tr><td colspan="7" class="text-center text-muted">No open needs found. Seed a scenario above.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Registered Volunteers</div>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Skills</th>
+                    <th>Languages</th>
+                    <th>Location</th>
+                    <th>Window</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="volunteersTableBody">
+                  <tr><td colspan="7" class="text-center text-muted">No registered volunteers found.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: MATCHING CONSOLE -->
+      <section id="matching" class="tab-content">
+        <div class="card">
+          <div class="card-title">
+            <span>Algorithm & Urgency Weights Configuration</span>
+            <small class="text-muted">Section 4.2: w(v,n) = u_n · (α·S + β·P + γ·A + η·L)</small>
+          </div>
+
+          <div class="grid-4" style="margin-bottom: 16px;">
+            <div>
+              <label class="stat-label">Matching Algorithm:</label>
+              <select id="matchingAlgoSelect" class="btn btn-secondary" style="width: 100%; margin-top: 6px;">
+                <option value="proposed">Proposed (Hungarian / LinearSumAssignment - Optimal)</option>
+                <option value="greedy">Constrained Greedy (Descending Urgency)</option>
+                <option value="nearest">Nearest-first (Distance-only baseline)</option>
+                <option value="random">Random Assignment (Baseline)</option>
+              </select>
+            </div>
+            <div>
+              <label class="stat-label">Skill Match Weight α: <span id="val_alpha">0.4</span></label>
+              <input type="range" id="slider_alpha" min="0" max="1" step="0.05" value="0.4" style="width: 100%;">
+            </div>
+            <div>
+              <label class="stat-label">Proximity Weight β: <span id="val_beta">0.3</span></label>
+              <input type="range" id="slider_beta" min="0" max="1" step="0.05" value="0.3" style="width: 100%;">
+            </div>
+            <div>
+              <label class="stat-label">Availability Weight γ: <span id="val_gamma">0.2</span></label>
+              <input type="range" id="slider_gamma" min="0" max="1" step="0.05" value="0.2" style="width: 100%;">
+            </div>
+          </div>
+
+          <div class="grid-4" style="margin-bottom: 20px;">
+            <div>
+              <label class="stat-label">Language Match Weight η: <span id="val_eta">0.1</span></label>
+              <input type="range" id="slider_eta" min="0" max="1" step="0.05" value="0.1" style="width: 100%;">
+            </div>
+            <div>
+              <label class="stat-label">Max Travel Radius R_max (km): <span id="val_rmax">25</span></label>
+              <input type="range" id="slider_rmax" min="5" max="50" step="1" value="25" style="width: 100%;">
+            </div>
+            <div style="grid-column: span 2; display: flex; align-items: flex-end;">
+              <button class="btn btn-primary" id="runMatchingBtn" style="width: 100%; padding: 12px;">
+                🚀 Execute Matching Engine
+              </button>
+            </div>
+          </div>
+
+          <!-- Matching Outcome Statistics -->
+          <div class="grid-4">
+            <div class="stat-box">
+              <span class="stat-label">Qualified Coverage</span>
+              <span class="stat-value" id="matchStatCoverage">—</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Skill Match Precision</span>
+              <span class="stat-value" id="matchStatPrecision">—</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Mean Travel Distance</span>
+              <span class="stat-value" id="matchStatDistance">—</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Total Utility / Runtime</span>
+              <span class="stat-value" id="matchStatUtility">—</span>
+              <span class="stat-sub" id="matchStatRuntime">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Proposed Assignments Table -->
+        <div class="card">
+          <div class="card-title">
+            <span>Assignment Proposals (Global Hungarian Solution)</span>
+            <small class="text-muted">Review & 1-Click Coordinator Lock</small>
+          </div>
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>Assignment ID</th>
+                  <th>Volunteer</th>
+                  <th>Need / Slot</th>
+                  <th>Category</th>
+                  <th>Urgency-Weighted Score</th>
+                  <th>Component Breakdown</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="assignmentsTableBody">
+                <tr><td colspan="7" class="text-center text-muted">Execute matching above to view proposals.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: MULTILINGUAL CHAT -->
+      <section id="chatbot" class="tab-content">
+        <div class="chat-window">
+          <div class="chat-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <strong>💬 Multilingual Coordination Assistant</strong>
+              <span class="badge badge-info" id="chatAudioNotif" class="hidden"></span>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <select id="chatRole" class="btn btn-secondary btn-sm">
+                <option value="volunteer">Role: Volunteer</option>
+                <option value="coordinator">Role: Coordinator</option>
+                <option value="community">Role: Affected Community</option>
+              </select>
+              <select id="chatTargetLang" class="btn btn-secondary btn-sm">
+                <option value="hi">Translate To: Hindi (हिंदी)</option>
+                <option value="pa">Translate To: Punjabi (ਪੰਜਾਬੀ)</option>
+                <option value="bn">Translate To: Bengali (বাংলা)</option>
+                <option value="ta">Translate To: Tamil (தமிழ்)</option>
+                <option value="en">Translate To: English</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="chat-messages" id="chatMessages"></div>
+
+          <div class="chat-suggestions">
+            <div class="suggestion-chip" data-text="Register as a volunteer">📝 Register Volunteer</div>
+            <div class="suggestion-chip" data-text="Report need for emergency supplies">🚨 Report Relief Need</div>
+            <div class="suggestion-chip" data-text="Where is Camp Alpha?">⛺ Camp Alpha Info</div>
+            <div class="suggestion-chip" data-text="What supplies are available at Central Depot?">📦 Supplies Query</div>
+            <div class="suggestion-chip" data-text="We need drinking water urgently">💧 Urgent Water (Phrasebook)</div>
+            <div class="suggestion-chip" data-text="Deliver 50 boxes of paracetamol and 100 liters of drinking water to Camp Alpha">🛡️ 50 Boxes Paracetamol (Preservation Test)</div>
+          </div>
+
+          <div class="chat-input-bar">
+            <button class="btn btn-secondary" id="voiceNoteBtn" title="Simulate voice-note recording">🎙️ Voice</button>
+            <input type="text" id="chatInput" placeholder="Type your message in any language or select a suggestion...">
+            <button class="btn btn-primary" id="chatSendBtn">Send</button>
+          </div>
+          <div id="chatTyping" style="display: none; padding: 4px 16px; font-size: 11px; color: #94a3b8;">Assistant is translating and routing...</div>
+        </div>
+      </section>
+
+      <!-- TAB 4: SMS GATEWAY SIMULATOR -->
+      <section id="sms" class="tab-content">
+        <div class="grid-2">
+          <div>
+            <div class="card">
+              <div class="card-title">Feature Phone SMS Command Grammar</div>
+              <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;">
+                As demonstrated in Table 3 of the paper, registrations and status commands can operate over basic SMS without mobile data.
+                A compact volunteer registration takes <strong>only 54 characters</strong>, fitting well within one standard 160-character SMS segment.
+              </p>
+
+              <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+                <button class="btn btn-secondary sms-sample-btn" data-sms="REG|Manya S|MED,TRN|hi,pa,en|31.2240,75.7708|0800-1800">
+                  📋 Sample 1 (Paper Ex): REG|Manya S|MED,TRN|hi,pa,en|31.2240,75.7708|0800-1800 (54 bytes)
+                </button>
+                <button class="btn btn-secondary sms-sample-btn" data-sms="REG|Charan Tej|LOG|pa,en|31.2850,75.6500|0900-1700">
+                  📋 Sample 2: REG|Charan Tej|LOG|pa,en|31.2850,75.6500|0900-1700
+                </button>
+                <button class="btn btn-secondary sms-sample-btn" data-sms="NEED|Urgent Water Shortage|DST|2|4|31.2240,75.7708|0800-1800|hi">
+                  📋 Sample 3: NEED|Urgent Water Shortage|DST|2|4|31.2240,75.7708|0800-1800|hi
+                </button>
+                <button class="btn btn-secondary sms-sample-btn" data-sms="STATUS|CAMP-01">
+                  📋 Sample 4: STATUS|CAMP-01
+                </button>
+              </div>
+
+              <div style="margin-bottom: 12px;">
+                <label class="stat-label">Sender Phone Number:</label>
+                <input type="text" id="smsSenderPhone" value="+919876543210" class="btn btn-secondary" style="width: 100%; margin-top: 6px; text-align: left;">
+              </div>
+
+              <div style="margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <label class="stat-label">SMS Message Content:</label>
+                  <span id="smsByteCount" style="font-size: 11px; color: var(--text-muted);">0 / 160 bytes</span>
+                </div>
+                <textarea id="smsInputText" rows="3" class="btn btn-secondary" style="width: 100%; margin-top: 6px; text-align: left; resize: none; font-family: monospace;" placeholder="REG|Name|Skills|Langs|Lat,Lon|Window"></textarea>
+              </div>
+
+              <button class="btn btn-primary" id="smsSendBtn" style="width: 100%; padding: 10px;">Transmit via SMS Gateway</button>
+            </div>
+          </div>
+
+          <!-- Feature Phone Simulator Mockup -->
+          <div>
+            <div class="sms-phone-mock">
+              <div class="sms-phone-header">
+                📶 RELIEF SMS GATEWAY [8800] · 100% OFFLINE READY
+              </div>
+              <div class="sms-chat-log" id="smsChatLog">
+                <div class="sms-bubble sms-in">
+                  <div class="sms-sender">Gateway System</div>
+                  <div>Welcome to Relief SMS Gateway. Send HELP for syntax.</div>
+                  <div class="sms-meta">System Ready</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: LOCAL-FIRST SYNC & CRDT -->
+      <section id="sync" class="tab-content">
+        <div class="card">
+          <div class="card-title">
+            <span>Local-First Shared State & Delta Synchronisation</span>
+            <small class="text-muted">Section 4.2 & CRDT-Lite</small>
+          </div>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+            In disaster zones where connectivity collapses, each camp node maintains a local SQLite database (WAL mode) and IndexedDB PWA replica.
+            Updates carry a Hybrid Logical Clock (HLC) timestamp. Devices exchange only deltas since the last acknowledged sync, compressed with zlib level 9.
+          </p>
+
+          <div class="grid-4" style="margin-bottom: 20px;">
+            <div class="stat-box">
+              <span class="stat-label">Raw Delta Size</span>
+              <span class="stat-value" id="syncDeltaRawSize">—</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Compressed Size (zlib 9)</span>
+              <span class="stat-value" id="syncDeltaCompSize">—</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Bandwidth Savings</span>
+              <span class="stat-value" id="syncDeltaRatio">—</span>
+            </div>
+            <div style="display: flex; align-items: center;">
+              <button class="btn btn-primary" id="exportDeltaBtn" style="width: 100%; padding: 14px;">
+                🔄 Export & Measure Delta Package
+              </button>
+            </div>
+          </div>
+
+          <div class="card-title" style="margin-top: 10px;">Delta Sync JSON Inspector</div>
+          <pre id="syncDeltaJsonView" style="background: #030712; padding: 16px; border-radius: var(--radius-sm); font-size: 12px; max-height: 280px; overflow-y: auto; color: #38bdf8; border: 1px solid var(--border-color);">
+Click "Export & Measure Delta Package" to inspect serialized payload.
+          </pre>
+        </div>
+      </section>
+
+      <!-- TAB 6: RESEARCH BENCHMARKS (TABLES 2, 3, 4) -->
+      <section id="benchmarks" class="tab-content">
+        <div class="card">
+          <div class="card-title">
+            <span>Reproduce Research Paper Benchmarks (Table 2, 3 & 4)</span>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <select id="benchSeedsSelect" class="btn btn-secondary btn-sm">
+                <option value="5">5 Random Seeds (Fast)</option>
+                <option value="15">15 Random Seeds (Medium)</option>
+                <option value="30" selected>30 Random Seeds (Exact Paper Spec)</option>
+              </select>
+              <button class="btn btn-primary btn-sm" id="runResearchBenchmarksBtn">Run Research Benchmark Suite</button>
+            </div>
+          </div>
+
+          <!-- Table 2: Matching Results -->
+          <div style="margin-top: 14px; margin-bottom: 24px;">
+            <h4 style="margin-bottom: 8px;">Table 2. Matching results on simulated relief scenarios (mean over seeds)</h4>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Scenario</th>
+                    <th>Method</th>
+                    <th>Qualified coverage (%)</th>
+                    <th>Skill precision (%)</th>
+                    <th>Distance (km)</th>
+                    <th>Utility ratio (%)</th>
+                    <th>Runtime (ms)</th>
+                  </tr>
+                </thead>
+                <tbody id="benchTable2Body">
+                  <tr><td colspan="7" class="text-center text-muted">Click "Run Research Benchmark Suite" above to generate Table 2.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Table 3: Low Bandwidth -->
+          <div style="margin-bottom: 24px;">
+            <h4 style="margin-bottom: 8px;">Table 3. Payload sizes for low-bandwidth operation (zlib level 9)</h4>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Payload</th>
+                    <th>Raw size (bytes)</th>
+                    <th>Compressed (bytes)</th>
+                  </tr>
+                </thead>
+                <tbody id="benchTable3Body">
+                  <tr><td colspan="3" class="text-center text-muted">Click benchmark runner to populate.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Table 4: Translation Quality -->
+          <div>
+            <h4 style="margin-bottom: 8px;">Table 4. Translation-quality results on relief-domain test set</h4>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Language pair</th>
+                    <th>BLEU</th>
+                    <th>chrF++</th>
+                    <th>COMET</th>
+                    <th>Adequacy (1–5)</th>
+                    <th>Critical-content preserved (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="benchTable4Body">
+                  <tr><td colspan="6" class="text-center text-muted">Click benchmark runner to populate.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="/static/js/pwa_store.js"></script>
+  <script src="/static/js/chat_widget.js"></script>
+  <script src="/static/js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        console.log('PWA Service Worker registered:', reg.scope);
+      }).catch(err => {
+        console.warn('SW registration deferred:', err);
+      });
+    }
+  </script>
+</body>
+</html>

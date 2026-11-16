@@ -1,0 +1,33 @@
+[
+  {
+    "point_id": "SUP-01",
+    "name": "Central Distribution Depot (Phagwara)",
+    "latitude": 31.2210,
+    "longitude": 75.7680,
+    "items": [
+      {"item": "Drinking Water Bottles (1L)", "stock": 4500, "status": "In Stock"},
+      {"item": "Dry Rations (Rice/Lentils kit)", "stock": 1200, "status": "In Stock"},
+      {"item": "ORS Packets", "stock": 3000, "status": "In Stock"},
+      {"item": "Tarpaulin Sheets", "stock": 600, "status": "In Stock"},
+      {"item": "Blankets", "stock": 850, "status": "In Stock"}
+    ],
+    "distribution_hours": "07:00 - 19:00",
+    "coordinator": "A. Ramaprasad",
+    "vehicle_access": "All heavy trucks and 4WD"
+  },
+  {
+    "point_id": "SUP-02",
+    "name": "North Sector Supply Hub (Jalandhar)",
+    "latitude": 31.2900,
+    "longitude": 75.6400,
+    "items": [
+      {"item": "First Aid Kits", "stock": 180, "status": "Low Stock"},
+      {"item": "Paracetamol Tablets", "stock": 1500, "status": "In Stock"},
+      {"item": "Baby Food / Infant Formula", "stock": 90, "status": "Critical Low"},
+      {"item": "Water Purification Tablets", "stock": 5000, "status": "In Stock"}
+    ],
+    "distribution_hours": "08:00 - 20:00",
+    "coordinator": "M. Sharma",
+    "vehicle_access": "Medium trucks and light vans"
+  }
+]

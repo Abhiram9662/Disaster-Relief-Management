@@ -1,0 +1,38 @@
+[
+  {
+    "schedule_id": "SCH-01",
+    "event": "Morning Meal and Dry Ration Distribution",
+    "location": "Camp Alpha and Camp Gamma",
+    "start_time": "08:00",
+    "end_time": "10:30",
+    "target_group": "All camp residents",
+    "assigned_team": "Distribution Group A"
+  },
+  {
+    "schedule_id": "SCH-02",
+    "event": "Water Tanker Refill and Purification Check",
+    "location": "Camp Beta",
+    "start_time": "11:00",
+    "end_time": "13:00",
+    "target_group": "Camp Beta Water Reserves",
+    "assigned_team": "Logistics Team 2"
+  },
+  {
+    "schedule_id": "SCH-03",
+    "event": "Medical Triage and Pediatric Doctor Consultation",
+    "location": "Camp Alpha Medical Tent",
+    "start_time": "09:00",
+    "end_time": "15:00",
+    "target_group": "Injured, elderly, and children",
+    "assigned_team": "Medical Volunteers Team M1"
+  },
+  {
+    "schedule_id": "SCH-04",
+    "event": "Evening Cooked Food Packet Distribution",
+    "location": "All Camps (Alpha, Beta, Gamma)",
+    "start_time": "17:30",
+    "end_time": "20:00",
+    "target_group": "Displaced communities",
+    "assigned_team": "Distribution Group B & Volunteer Drivers"
+  }
+]

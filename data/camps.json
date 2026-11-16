@@ -1,0 +1,41 @@
+[
+  {
+    "camp_id": "CAMP-01",
+    "name": "Camp Alpha",
+    "location": "Phagwara Community Ground",
+    "latitude": 31.2240,
+    "longitude": 75.7708,
+    "capacity": 500,
+    "current_occupancy": 420,
+    "medical_post": "Active (2 doctors on duty, 1 paramedic)",
+    "water_status": "Potable drinking water available, tanker refilled at 08:00",
+    "contact": "+91-98765-01001",
+    "notes": "Accepting medical volunteers and dry rations distribution teams."
+  },
+  {
+    "camp_id": "CAMP-02",
+    "name": "Camp Beta",
+    "location": "Jalandhar Bypass Relief Center",
+    "latitude": 31.2850,
+    "longitude": 75.6500,
+    "capacity": 800,
+    "current_occupancy": 760,
+    "medical_post": "Urgent need for pediatric supplies and oral rehydration salts",
+    "water_status": "Purification tablets distribution ongoing",
+    "contact": "+91-98765-01002",
+    "notes": "Emergency shelter near capacity. Heavy logistics vehicles required."
+  },
+  {
+    "camp_id": "CAMP-03",
+    "name": "Camp Gamma",
+    "location": "Civil Lines High School Safe Zone",
+    "latitude": 31.1800,
+    "longitude": 75.8200,
+    "capacity": 350,
+    "current_occupancy": 190,
+    "medical_post": "First-aid station operational",
+    "water_status": "Bottled water supply stable for 48 hours",
+    "contact": "+91-98765-01003",
+    "notes": "Multilingual translators (Hindi, Punjabi, Bengali) needed for displaced families."
+  }
+]

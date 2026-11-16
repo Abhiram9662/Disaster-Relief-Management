@@ -1,0 +1,614 @@
+/* Modern Disaster Relief Coordination UI Styling */
+:root {
+  --bg-primary: #0b1120;
+  --bg-secondary: #111c35;
+  --bg-card: #182544;
+  --bg-card-hover: #1f3057;
+  --border-color: #273760;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent-blue: #38bdf8;
+  --accent-primary: #2563eb;
+  --accent-green: #10b981;
+  --accent-red: #ef4444;
+  --accent-orange: #f97316;
+  --accent-yellow: #f59e0b;
+  --accent-purple: #a855f7;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header & Top Bar */
+.topbar {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-icon {
+  font-size: 26px;
+  background: linear-gradient(135deg, #2563eb, #38bdf8);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.brand-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.topbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-pill {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-pill.online {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-pill.offline {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Main Container & Tabs */
+.app-container {
+  display: flex;
+  flex: 1;
+}
+
+.nav-sidebar {
+  width: 250px;
+  background-color: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-tab {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.nav-tab:hover {
+  background-color: var(--bg-card);
+  color: var(--text-main);
+}
+
+.nav-tab.active {
+  background-color: var(--accent-primary);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.nav-tab .tab-icon {
+  font-size: 18px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Common Card Styling */
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Grid Layouts */
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Stat Cards */
+.stat-box {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.stat-sub {
+  font-size: 12px;
+  color: var(--accent-blue);
+  margin-top: 4px;
+}
+
+/* Category Progress Cards */
+.cat-progress-item {
+  margin-bottom: 14px;
+}
+
+.cat-progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.progress-bar-bg {
+  background-color: #273760;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  background-color: var(--accent-blue);
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-bar-fill.fill-medical { background-color: #ef4444; }
+.progress-bar-fill.fill-logistics { background-color: #f97316; }
+.progress-bar-fill.fill-translation { background-color: #a855f7; }
+.progress-bar-fill.fill-distribution { background-color: #10b981; }
+
+/* Buttons */
+.btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background-color: var(--accent-primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-secondary {
+  background-color: #273760;
+  color: #e2e8f0;
+}
+
+.btn-secondary:hover {
+  background-color: #33467c;
+}
+
+.btn-danger {
+  background-color: var(--accent-red);
+  color: #ffffff;
+}
+
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 11px;
+}
+
+/* Tables */
+.table-responsive {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th, td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  background-color: var(--bg-secondary);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+tr:hover td {
+  background-color: var(--bg-card-hover);
+}
+
+/* Badges & Tags */
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.tag-medical { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+.tag-logistics { background: rgba(249, 115, 22, 0.2); color: #fdba74; }
+.tag-translation { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; }
+.tag-distribution { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+
+.status-badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.status-available { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+.status-assigned { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+.status-open { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+.status-filled { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+
+.urgency-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.urgency-1 { background: #1e3a8a; color: #bfdbfe; }
+.urgency-2 { background: #b45309; color: #fde68a; }
+.urgency-3 { background: #c2410c; color: #fed7aa; }
+.urgency-4 { background: #991b1b; color: #fecaca; }
+
+/* Interactive Canvas Map */
+.map-canvas-container {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  background: #0f172a;
+}
+
+canvas#disasterMapCanvas {
+  display: block;
+  width: 100%;
+  height: 400px;
+}
+
+/* Chatbot Styles */
+.chat-window {
+  display: flex;
+  flex-direction: column;
+  height: 600px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.chat-header {
+  padding: 12px 18px;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-bubble {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.user-bubble {
+  align-self: flex-end;
+  background-color: var(--accent-primary);
+  color: #ffffff;
+  border-bottom-right-radius: 2px;
+}
+
+.bot-bubble {
+  align-self: flex-start;
+  background-color: #1e293b;
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-bottom-left-radius: 2px;
+}
+
+.bubble-badges {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.bubble-badges .badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.badge-success { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+.badge-info { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+.badge-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+.badge-purple { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; }
+
+.dual-original {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.15);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.chat-suggestions {
+  padding: 8px 16px;
+  background-color: var(--bg-secondary);
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  border-top: 1px solid var(--border-color);
+}
+
+.suggestion-chip {
+  white-space: nowrap;
+  font-size: 11px;
+  padding: 5px 10px;
+  border-radius: 14px;
+  background-color: var(--bg-card);
+  color: var(--accent-blue);
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+}
+
+.suggestion-chip:hover {
+  background-color: var(--border-color);
+}
+
+.chat-input-bar {
+  padding: 12px 16px;
+  background-color: var(--bg-secondary);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.chat-input-bar input {
+  flex: 1;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  outline: none;
+}
+
+/* SMS Gateway Simulator Phone Mock */
+.sms-phone-mock {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  background-color: #030712;
+  border: 2px solid #374151;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+}
+
+.sms-phone-header {
+  background-color: #1f2937;
+  padding: 12px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #9ca3af;
+  border-bottom: 1px solid #374151;
+}
+
+.sms-chat-log {
+  height: 380px;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #111827;
+}
+
+.sms-bubble {
+  max-width: 85%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-family: monospace;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.sms-out {
+  align-self: flex-end;
+  background-color: #065f46;
+  color: #d1fae5;
+  border-bottom-right-radius: 2px;
+}
+
+.sms-in {
+  align-self: flex-start;
+  background-color: #1f2937;
+  color: #f3f4f6;
+  border-bottom-left-radius: 2px;
+}
+
+.sms-sender {
+  font-size: 10px;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.sms-meta {
+  font-size: 9px;
+  opacity: 0.8;
+  margin-top: 4px;
+  text-align: right;
+}
+
+.sms-controls {
+  padding: 12px;
+  background-color: #1f2937;
+  border-top: 1px solid #374151;
+}
+
+/* Toasts */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-success { border-left: 4px solid var(--accent-green); }
+.toast-error { border-left: 4px solid var(--accent-red); }
+.toast-warning { border-left: 4px solid var(--accent-yellow); }
+.toast-info { border-left: 4px solid var(--accent-blue); }
+
+.hidden { display: none !important; }
+.text-muted { color: var(--text-muted); }
+.text-success { color: var(--accent-green); }
+.text-center { text-align: center; }
